@@ -101,9 +101,8 @@ var elem=$('#container ul');
 				<div class="menu-wrap">
 				<nav class="menu">
 					<div class="icon-list">
-						<a href="Chat.html"><i class="fa fa-fw fa-mobile"></i><span>Chat</span></a>
-						
-						
+						<a href="chat.html"><i class="fa fa-fw fa-mobile"></i><span>Chat</span></a>
+            <a href="friend.html"><i class="fa fa-users"></i><span>Friends</span></a>
 					</div>
 				</nav>
 				<button class="close-button" id="close-button">Close Menu</button>
@@ -120,9 +119,12 @@ var elem=$('#container ul');
 			<div class="w3ls-header-right">
 				<ul>
 					<li class="dropdown head-dpdn">
-						<a href="signin.html" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i> Sign In</a>
+						<a href="signin_front.php" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i> Sign In</a>
 					</li>
-					
+          <li class="dropdown head-dpdn">
+            <a href="manage.php" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i>Anthony</a>
+          </li>
+
 
 					<li class="dropdown head-dpdn">
 						<div class="header-right">
@@ -142,7 +144,7 @@ var elem=$('#container ul');
 				</div>
 				<div class="agileits_search">
 
-				<a class="post-w3layouts-ad" href="post-ad.html">Share your moment</a>
+				<a class="post-w3layouts-ad" href="post-comment.php">Share your moment</a>
 				</div>
 				<div class="clearfix"></div>
 			</div>
@@ -150,7 +152,7 @@ var elem=$('#container ul');
 	</header>
 	<!-- //header -->
 	<!-- breadcrumbs -->
-	
+
 	<!-- //breadcrumbs -->
 	<!-- Books, sports & hobbies -->
 	<div class="total-ads main-grid-border">
@@ -189,7 +191,7 @@ var elem=$('#container ul');
 										<select>
 														<option value="">Date: Most recent</option>
 														<option value="">Date: Oldest</option>
-														
+
 										</select>
 									   </div>
 									 </div>
@@ -201,11 +203,11 @@ var elem=$('#container ul');
 									<section class="list-left">
 									<h5 class="title">soccer day yeahyeahyeah</h5>
 									<span class="adprice">Anthony</span>
-                  <button>follow</button>
 									</section>
 									<section class="list-right">
 									<span class="date">Today, 17:05</span>
-									<button>Like</button>
+									<button>Like &#x2661</button>
+                  <div id="likes"> &#10084 1</div>
 									</section>
 									<div class="clearfix"></div>
 									</li>
@@ -220,7 +222,8 @@ var elem=$('#container ul');
 									</section>
 									<section class="list-right">
 									<span class="date">Today, 17:04</span>
-									<button>Like</button>
+									<button>Like &#x2661</button>
+                  <div id="likes"> &#10084 2</div>
 									</section>
 									<div class="clearfix"></div>
 									</li>
@@ -231,11 +234,13 @@ var elem=$('#container ul');
 									<section class="list-left">
 									<h5 class="title">Reading is good!</h5>
 									<span class="adprice">Annie</span>
-									<button>unfollow</button>
+									<button>follow</button>
 									</section>
 									<section class="list-right">
 									<span class="date">Today, 17:03</span>
-									<button>Like</button>
+									<button>Like &#x2661</button>
+                  <div id="likes"> &#10084 5</div>
+
 									</section>
 									<div class="clearfix"></div>
 									</li>
@@ -285,23 +290,6 @@ var elem=$('#container ul');
 									<div class="clearfix"></div>
 									</li>
 								</a>
-								<a href="single.html">
-									<li>
-									<img src="images/b10.jpg" title="" alt="" />
-									<section class="list-left">
-									<h5 class="title">Reading is good!</h5>
-									<span class="adprice">Annie</span>
-                  <button>unfollow</button>
-									</section>
-									<section class="list-right">
-									<span class="date">Today, 17:03</span>
-									<button>Like</button>
-									</section>
-									<div class="clearfix"></div>
-									</li>
-								</a>
-
-
 							</ul>
 						</div>
 							</div>
