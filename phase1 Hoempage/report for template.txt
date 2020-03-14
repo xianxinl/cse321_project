@@ -1,0 +1,8 @@
+What does this technology accomplish for you?
+it provides the team a basic look of our front end so that we can modify it.
+
+How does this technology accomplish what it does?
+it has written a beautiful front end page already and it is available for people to modify. 
+
+What license(s) or terms of service apply to this technology?
+https://creativecommons.org/licenses/by/3.0/
