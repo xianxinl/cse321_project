@@ -1,0 +1,9 @@
+What does this technology accomplish?
+bootstrap helps to make the front end prettier
+How does this technology accomplish what it does?
+bootstrap has many css ,javascript file, etc. written and makes it available for everyone to use.  Inside index.html there are 2 script file from bootstrap that change the posts from list alignment to grid alignment.
+What license(s) or terms of service apply to this technology?
+https://github.com/twbs/bootstrap/blob/v4.0.0/LICENSE
+
+
+
