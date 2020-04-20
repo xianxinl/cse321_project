@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<title>UB Social</title>
+<link rel="stylesheet" href="css/bootstrap.min.css"><!-- bootstrap-CSS -->
+<link rel="stylesheet" href="css/bootstrap-select.css"><!-- bootstrap-select-CSS -->
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" /><!-- style.css -->
+
+
+
+</head>
+<body>
+
+<!-- header -->
+<header>
+	<div class="w3ls-header"><!--header-one-->
+
+		<div class="w3ls-header-right">
+			<ul>
+				<li class="dropdown head-dpdn">
+					<a href="signin_front.php" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i> Sign In</a>
+				</li>
+				<li class="dropdown head-dpdn">
+					<a href="manage.php" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i>Anthony</a>
+				</li>
+
+
+				<li class="dropdown head-dpdn">
+					<div class="header-right">
+<!-- Large modal -->
+
+	</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="clearfix"> </div>
+	</div>
+	<div class="container">
+		<div class="agile-its-header">
+			<div class="logo">
+				<h1><a href="index.html"><span>UB</span>Social</a></h1>
+			</div>
+			<div class="agileits_search">
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</header>
+
+
+<div class="total-ads main-grid-border">
+	<div class="container">
+
+		<div class="ads-grid">
+
+			<div class="agileinfo-ads-display col-md-9">
+				<div class="wrapper">
+				<div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
+
+					<div id="myTabContent" class="tab-content">
+					<div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
+						 <div>
+											<div id="container">
+
+							<div class="sort">
+								 <div class="sort-by">
+									<label>Sort By : </label>
+									<select>
+													<option value="">Date: Most recent</option>
+													<option value="">Date: Oldest</option>
+
+									</select>
+									 </div>
+								 </div>
+							<div class="clearfix"></div>
+
+
+
+
+							<ul id = "section"class="list">
+						</ul>
+
+
+
+
+					</div>
+						</div>
+					</div>
+
+
+
+					</div>
+				</div>
+			</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<h2 class="w3-head">Post Your Moment</h2>
+	<div class="post-ad-form">
+		<div class="upload-ad-photos">
+		<label>Photos for your Moment</label>
+			<div class="photos-upload-view">
+				<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="5242880" />
+				<div>
+					<input type="file" id="tupian">
+					<div id="filedrag">or drop files here</div>
+				</div>
+				</div>
+			</p>
+		<div class="clearfix"></div>
+		</div>
+
+		<form enctype="multipart/form-data" name="moment-form" onsubmit="return sendMoment()">
+			<div class="clearfix"></div>
+			<label>Moment Description</label>
+			<input type="text" placeholder="Write a few lines about your  moment" id="Moment" name = "description" maxlength="50"></textarea>
+			<div class="clearfix"></div>
+				</p>
+			<input type="submit" value="Post">
+			<div class="clearfix"></div>
+			</form>
+			</div>
+	</div>
+
+
+	</div>
+	<!-- // Products -->
+
+		<script src= "/socket.io/socket.io.js"></script>
+		<script>
+
+        var server = ''
+        var io = io('');
+				let Imginput = document.getElementById('tupian');
+        io.emit("all moment", "all momment");
+				io.emit("all comment", "all comment");
+				function sendMoment(){
+					console.log("anniu")
+					var moment  = document.getElementById('Moment').value;
+					moment = moment.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+					var img ="";
+					console.log(Imginput.files.length);
+					if( Imginput.files.length == 0 ){
+    				io.emit('chat message', {img,moment});
+					}else{
+						console.log(Imginput.files.length)
+						var file = Imginput.files[0];       //得到该图片
+						var reader = new FileReader();      //创建一个FileReader对象，进行下一步的操作
+						reader.readAsDataURL(file);              //通过readAsDataURL读取图片
+						reader.onload =function () {            //读取完毕会自动触发，读取结果保存在result中
+								img = {img: this.result};
+								console.log("fa xinxi le ");
+								io.emit('chat message', {img,moment});
+						}
+					}
+					// var file = Imginput.files[0];       //得到该图片
+					// var reader = new FileReader();      //创建一个FileReader对象，进行下一步的操作
+					// reader.readAsDataURL(file);              //通过readAsDataURL读取图片
+					// reader.onload =function () {            //读取完毕会自动触发，读取结果保存在result中
+					// 		img = {img: this.result};
+					// 		console.log("fa xinxi le ");
+					// 		io.emit('chat message', {img,moment});
+					// }
+
+					// io.emit('chat message', {img,moment});
+					document.forms['moment-form'].reset();
+					Imginput.value='';
+					return false;
+        }
+
+				function sendComment(self){
+					console.log("click on ");
+					var id = self.getAttribute("moment-id");
+					var comment = document.getElementById("Comment-"+id).value;
+					if(comment != null){
+						comment = comment.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+						console.log({comment, id});
+						io.emit("comment to", {comment, id});
+					}
+					return false;
+				}
+				function addLikes(self){
+					var id = self.getAttribute("data-id");
+					io.emit("add like to ", id);
+				}
+				io.on("like result", function(data){
+					var conve_data =JSON.parse(data);
+					console.log(conve_data[0].Likes);
+					var met = document.getElementById("vote-"+conve_data[0].msgID);
+					met.innerHTML = conve_data[0].Likes;
+
+				})
+				io.on("comment to", function(data){
+					var met = document.getElementById("title-"+data.id);
+					var li= document.createElement("cmt");
+					li.innerHTML = "<br> comment: "+data.comment ;
+					met.append(li);
+				})
+
+        io.on("chat message", function(data){
+					console.log(data);
+					var conve_data = JSON.parse(data);
+					console.log(conve_data[0].msg);
+					var met = document.getElementById('section');
+					var li = document.createElement("li");
+					li.innerHTML += " <form id ='"+conve_data[0].msgID+"'>";
+					li.innerHTML += "<img src='"+ conve_data[0].image+"'/>";
+					li.innerHTML += " <section class='"+"list-left"+"'> "
+					li.innerHTML += " <ul class='"+"title"+"' id= '"+"title-"+conve_data[0].msgID+"' > '"+conve_data[0].msg+"' </ul>"
+					li.innerHTML += " <input type='"+"text"+"' placeholder='"+"Leave comment"+"' id='"+"Comment-"+conve_data[0].msgID+"'  maxlength='"+50+"'> ";
+					li.innerHTML += " <input moment-id = '"+conve_data[0].msgID+"' type='"+"submit"+"' value='"+"Submit"+"' onclick = 'sendComment(this)'>"
+					li.innerHTML += " </section>"
+					li.innerHTML += " <section class='"+"list-right"+"'>"
+					li.innerHTML += " <span id ='"+"vote-"+conve_data[0].msgID+"' class='"+"vote"+"'> "+ conve_data[0].Likes+"</span>"
+					li.innerHTML += " <button data-id = '"+conve_data[0].msgID+"' onclick='addLikes(this)'>Like</button>"
+					li.innerHTML += " </section>"
+					li.innerHTML += " <div class='"+"clearfix"+"'></div> "
+					li.innerHTML += " </form>";
+					met.appendChild(li);
+        });
+
+        io.on("all moment", function(data){
+          var conve_data = JSON.parse(data);
+          var met = document.getElementById('section');
+          for(var a = 0; a < conve_data.length; a++){
+						var msg = conve_data[a];
+						// var div = $("#section");
+						var div = document.getElementById('section');
+						var li = document.createElement("li");
+						li.innerHTML += " <form id ='"+conve_data[a].msgID+"'>";
+						li.innerHTML += "<img src='"+ conve_data[a].image+"'/>";
+						li.innerHTML += " <section class='"+"list-left"+"'> "
+						li.innerHTML += " <ul class='"+"title"+"' id= '"+"title-"+conve_data[a].msgID+"' > '"+conve_data[a].msg+"' </ul>"
+						li.innerHTML += " <input type='"+"text"+"' placeholder='"+"Leave comment"+"' id='"+"Comment-"+conve_data[a].msgID+"'  maxlength='"+50+"'> ";
+						li.innerHTML += " <input moment-id = '"+conve_data[a].msgID+"' type='"+"submit"+"' value='"+"Submit"+"' onclick = 'sendComment(this)'>"
+						li.innerHTML += " </section>"
+						li.innerHTML += " <section class='"+"list-right"+"'>"
+						li.innerHTML += " <span id ='"+"vote-"+conve_data[a].msgID+"' class='"+"vote"+"'> "+ conve_data[a].Likes+"</span>"
+						li.innerHTML += " <button data-id = '"+conve_data[a].msgID+"' onclick='addLikes(this)'>Like</button>"
+						li.innerHTML += " </section>"
+						li.innerHTML += " <div class='"+"clearfix"+"'></div> "
+						li.innerHTML += " </form>";
+						met.appendChild(li);
+          }
+					io.on("all comment", function(data){
+						 var conve_data = JSON.parse(data);
+						 for(var a = 0; a < conve_data.length; a++){
+							 console.log("title-"+conve_data[a].msgID);
+							 var met = document.getElementById("title-"+conve_data[a].msgID);
+							 var li= document.createElement("cmt");
+							 li.innerHTML = "<br> comment: "+conve_data[a].msg;
+							 met.append(li);
+
+						 }
+					});
+        });
+
+		</script>
+
+</body>
+<script src="classie.js"></script>
+<script src="main.js"></script>
+</html>
