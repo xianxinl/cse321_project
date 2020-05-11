@@ -19,10 +19,10 @@
 		<div class="w3ls-header-right">
 			<ul>
 				<li class="dropdown head-dpdn">
-					<a href="signin_front.php" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i> Sign In</a>
+					<a href="signin_front.html" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i> Sign In</a>
 				</li>
 				<li class="dropdown head-dpdn">
-					<a href="manage.php" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i>Anthony</a>
+					<a href="manage.html" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i>Manage</a>
 				</li>
 
 
@@ -77,7 +77,8 @@
 							<div class="clearfix"></div>
 
 
-
+							<ul id = "alluser"class="list">
+							</ul>
 
 							<ul id = "section"class="list">
 						</ul>
@@ -137,65 +138,83 @@
 
         var server = ''
         var io = io('');
-				let Imginput = document.getElementById('tupian');
+		let Imginput = document.getElementById('tupian');
         io.emit("all moment", "all momment");
 				io.emit("all comment", "all comment");
+				io.emit("all user", "all user");
 				function sendMoment(){
-					console.log("anniu")
-					var moment  = document.getElementById('Moment').value;
-					moment = moment.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-					var img ="";
-					console.log(Imginput.files.length);
-					if( Imginput.files.length == 0 ){
-    				io.emit('chat message', {img,moment});
-					}else{
-						console.log(Imginput.files.length)
-						var file = Imginput.files[0];       //得到该图片
-						var reader = new FileReader();      //创建一个FileReader对象，进行下一步的操作
-						reader.readAsDataURL(file);              //通过readAsDataURL读取图片
-						reader.onload =function () {            //读取完毕会自动触发，读取结果保存在result中
-								img = {img: this.result};
-								console.log("fa xinxi le ");
-								io.emit('chat message', {img,moment});
-						}
-					}
-					// var file = Imginput.files[0];       //得到该图片
-					// var reader = new FileReader();      //创建一个FileReader对象，进行下一步的操作
-					// reader.readAsDataURL(file);              //通过readAsDataURL读取图片
-					// reader.onload =function () {            //读取完毕会自动触发，读取结果保存在result中
-					// 		img = {img: this.result};
-					// 		console.log("fa xinxi le ");
-					// 		io.emit('chat message', {img,moment});
-					// }
 
-					// io.emit('chat message', {img,moment});
-					document.forms['moment-form'].reset();
-					Imginput.value='';
-					return false;
-        }
-
+					var self = document.cookie;
+					var self_name = "";
+					if(self != ""){
+					self_name = self.split("=")[1];
+				}
+			console.log("anniu")
+			var moment  = document.getElementById('Moment').value;
+			moment = moment.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+			var img ="";
+			console.log(Imginput.files.length);
+			if( Imginput.files.length == 0 ){
+				io.emit('chat message', {img,moment, self_name});
+			}else{
+				console.log(Imginput.files.length)
+				var file = Imginput.files[0];       //得到该图片
+				var reader = new FileReader();      //创建一个FileReader对象，进行下一步的操作
+				reader.readAsDataURL(file);              //通过readAsDataURL读取图片
+				reader.onload =function () {            //读取完毕会自动触发，读取结果保存在result中
+						img = {img: this.result};
+						console.log("fa xinxi le ");
+						io.emit('chat message', {img,moment, self_name});
+				}
+			}
+			document.forms['moment-form'].reset();
+			Imginput.value='';
+			return false;
+}
 				function sendComment(self){
 					console.log("click on ");
 					var id = self.getAttribute("moment-id");
 					var comment = document.getElementById("Comment-"+id).value;
+					var self = document.cookie;
+					var self_name = "";
+					if(self != ""){
+					self_name = self.split("=")[1];
+				}
 					if(comment != null){
 						comment = comment.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-						console.log({comment, id});
-						io.emit("comment to", {comment, id});
+						console.log({comment, id, self_name});
+						io.emit("comment to", {comment, id, self_name});
 					}
 					return false;
 				}
 				function addLikes(self){
 					var id = self.getAttribute("data-id");
-					io.emit("add like to ", id);
+					var self = document.cookie;
+					var self_name = "";
+					if(self != ""){
+					self_name = self.split("=")[1];
 				}
+					io.emit("add like to ", {id, self_name});
+				}
+				function addDisLikes(self){
+					var id = self.getAttribute("dislike-data-id");
+					console.log(id);
+					var self = document.cookie;
+					var self_name = "";
+					if(self != ""){
+					self_name = self.split("=")[1];
+				}
+					io.emit("add dislike to ", {id, self_name});
+				}
+
+
 				io.on("like result", function(data){
 					var conve_data =JSON.parse(data);
 					console.log(conve_data[0].Likes);
 					var met = document.getElementById("vote-"+conve_data[0].msgID);
 					met.innerHTML = conve_data[0].Likes;
 
-				})
+				});
 				io.on("comment to", function(data){
 					var met = document.getElementById("title-"+data.id);
 					var li= document.createElement("cmt");
@@ -217,13 +236,96 @@
 					li.innerHTML += " <input moment-id = '"+conve_data[0].msgID+"' type='"+"submit"+"' value='"+"Submit"+"' onclick = 'sendComment(this)'>"
 					li.innerHTML += " </section>"
 					li.innerHTML += " <section class='"+"list-right"+"'>"
-					li.innerHTML += " <span id ='"+"vote-"+conve_data[0].msgID+"' class='"+"vote"+"'> "+ conve_data[0].Likes+"</span>"
 					li.innerHTML += " <button data-id = '"+conve_data[0].msgID+"' onclick='addLikes(this)'>Like</button>"
+					li.innerHTML += " <span id ='"+"vote-"+conve_data[0].msgID+"' class='"+"vote"+"'> "+ conve_data[0].Likes+"</span>"
+					li.innerHTML += " <button dislike-data-id = '"+conve_data[0].msgID+"' onclick='addDisLikes(this)'>DisLike</button>"
 					li.innerHTML += " </section>"
 					li.innerHTML += " <div class='"+"clearfix"+"'></div> "
 					li.innerHTML += " </form>";
 					met.appendChild(li);
         });
+
+				//all user display
+				io.on("all user", function(data){
+						 var conve_data = JSON.parse(data);
+						 var all_user = document.getElementById('alluser');
+						 for(var a = 0; a < conve_data.length; a++){
+							 //console.log(conve_data[a]);
+								var msg = conve_data[a];
+								var single = document.createElement("single");
+								var self = document.cookie;
+								var self_name = "";
+								var follow_name = conve_data[a].username;
+								var new_data = "follow";
+								if(self != ""){
+								self_name = self.split("=")[1];
+							}
+							//	console.log(conve_data[a].username);
+							//	io.emit('check follow', {self_name, follow_name});
+								single.innerHTML += "<a>User: "+conve_data[a].username+"     "+"</a>";
+								single.innerHTML += "<button follow-id ='"+conve_data[a].username+"' onclick='follow(this)'>"+new_data+"</button>";
+								single.innerHTML += "<button unfollow-id ='"+conve_data[a].username+"' onclick='unfollow(this)'>unfollow</button> <br>";
+
+
+								all_user.append(single);
+
+						 }
+
+					});
+
+					function follow(self){
+						var sbf = self.getAttribute("follow-id");
+					//	console.log(sbf);
+						var self = document.cookie;
+						var self_name = "";
+						if(self != ""){
+						self_name = self.split("=")[1];
+					}
+					io.emit('check follow', {self_name, sbf});
+					}
+					function unfollow(self){
+						var sbf = self.getAttribute("unfollow-id");
+					//	console.log(sbf);
+						var self = document.cookie;
+						var self_name = "";
+						if(self != ""){
+						self_name = self.split("=")[1];
+					}
+					io.emit('check unfollow', {self_name, sbf});
+					}
+
+					io.on('already follow', function(data){
+						alert("you already follow this guy, Click unfollow to stop following");
+					});
+
+					io.on('now u follow the guy', function(data){
+
+						alert("nice!, now you follow the guy");
+					});
+
+					io.on('already unfollow', function(data){
+						alert("you already unfollow this guy");
+
+					});
+
+					io.on('not follow yet', function(data){
+						alert("this guy is not in your follow list, you are not able to unfollow");
+
+					});
+					io.on('not login in', function(data){
+						alert("please login in first");
+						window.location.href = "/signin_front.html";
+					});
+
+					io.on('already like', function(data){
+						alert("One user can only vote once, you have already voted!");
+					});
+
+					io.on('never like', function(data){
+						alert("You never like this post, why Click Dislike all the time ! !");
+					});
+
+
 
         io.on("all moment", function(data){
           var conve_data = JSON.parse(data);
@@ -241,8 +343,9 @@
 						li.innerHTML += " <input moment-id = '"+conve_data[a].msgID+"' type='"+"submit"+"' value='"+"Submit"+"' onclick = 'sendComment(this)'>"
 						li.innerHTML += " </section>"
 						li.innerHTML += " <section class='"+"list-right"+"'>"
-						li.innerHTML += " <span id ='"+"vote-"+conve_data[a].msgID+"' class='"+"vote"+"'> "+ conve_data[a].Likes+"</span>"
 						li.innerHTML += " <button data-id = '"+conve_data[a].msgID+"' onclick='addLikes(this)'>Like</button>"
+						li.innerHTML += " <span id ='"+"vote-"+conve_data[a].msgID+"' class='"+"vote"+"'> "+ conve_data[a].Likes+"</span>"
+						li.innerHTML += " <button dislike-data-id = '"+conve_data[a].msgID+"' onclick='addDisLikes(this)'>DisLike</button>"
 						li.innerHTML += " </section>"
 						li.innerHTML += " <div class='"+"clearfix"+"'></div> "
 						li.innerHTML += " </form>";
@@ -251,7 +354,7 @@
 					io.on("all comment", function(data){
 						 var conve_data = JSON.parse(data);
 						 for(var a = 0; a < conve_data.length; a++){
-							 console.log("title-"+conve_data[a].msgID);
+						//	 console.log("title-"+conve_data[a].msgID);
 							 var met = document.getElementById("title-"+conve_data[a].msgID);
 							 var li= document.createElement("cmt");
 							 li.innerHTML = "<br> comment: "+conve_data[a].msg;
@@ -261,9 +364,19 @@
 					});
         });
 
+        io.on("newuser", function(data){
+  				var all_user = document.getElementById('alluser');
+  	 			var single = document.createElement("single");
+  				var new_data = "follow";
+  				single.innerHTML += "<a>User: "+data+"     "+"</a>";
+  		  	single.innerHTML += "<button follow-id ='"+data+"' onclick='follow(this)'>"+new_data+"</button>";
+  				single.innerHTML += "<button unfollow-id ='"+data+"' onclick='unfollow(this)'>unfollow</button> <br>";
+  				all_user.append(single);
+  					})
+
 		</script>
 
 </body>
-<script src="classie.js"></script>
+<script src="js/classie.js"></script>
 <script src="main.js"></script>
 </html>

@@ -1,0 +1,110 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>UB TRADE</title>
+<link rel="stylesheet" href="css/bootstrap.min.css"><!-- bootstrap-CSS -->
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" /><!-- style.css -->
+<link rel="stylesheet" href="css/font-awesome.min.css" /><!-- fontawesome-CSS -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- header -->
+	<header>
+		<div class="w3ls-header"><!--header-one-->
+			
+
+			<div class="clearfix"> </div>
+		</div>
+		<div class="container">
+			<div class="agile-its-header">
+				<div class="logo">
+					<h1><a href="index.html"><span>UB</span>Social</a></h1>
+				</div>
+				<div class="agileits_search">
+				<a class="post-w3layouts-ad" href="index.html">Back to Homepage</a>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</header>
+	<!-- //header -->
+	<!-- sign in form -->
+  <section>
+   <div id="agileits-sign-in-page" class="sign-in-wrapper">
+     <div class="agileinfo_signin">
+	 <h3>Sign Up</h3>
+	 	<div id="change"> </div>
+	 	<form enctype="multipart/form-data" name="account-form" onsubmit="return account()">
+         <input type="text" placeholder="Username" name="Name"  id="Name"></textarea>
+         <input type="text" placeholder="Password" name="password"  id="password"></textarea>
+         <input type="text" placeholder="Confirm Password" name="confirmPassword"  id="confirmPassword"></textarea>
+         <input type="submit" value="Sign Up">
+       </form>
+     </div>
+   </div>
+ </section>
+	<!-- //sign in form -->
+	<script src= "/socket.io/socket.io.js"></script>
+	<script>
+		var io = io('');
+		function account(self){
+			var User = document.getElementById('Name').value;
+			var PW = document.getElementById('password').value;
+			var CPW = document.getElementById('confirmPassword').value;
+			User = User.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+			PW = PW.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+			CPW = CPW.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+					if(User != null && PW != null && CPW != null){
+						if(PW == CPW){
+						io.emit('account', {User, CPW});
+						document.forms['account-form'].reset();
+						}
+						else{
+							document.getElementById("change").innerHTML = "The two password fields didn't match.";
+						}
+					}
+					else{
+						document.getElementById("change").innerHTML = "Please fill out all fields.";
+					}
+
+					return false;
+				}
+
+				io.on("account", function(data){
+					if(data == false){
+						document.getElementById("change").innerHTML = "Username already exists. please use a different username.";
+					}
+					else if(data == true){
+						alert("Account created! You will be directed to our login page.");
+						window.location.href = "/signin_front.html";
+					}
+					else{
+						document.getElementById("change").innerHTML = data;
+					}
+
+				})
+
+
+	</script>
+	<!--footer section start-->
+		<footer>
+			<div class="agileits-footer-bottom text-center">
+			<div class="container">
+				<div class="w3-footer-logo">
+					<h1><a href="index.html"><span>UB</span>Social</a></h1>
+				</div>
+				<div class="copyrights">
+					<p> Design by  <label> CSE_312_TEAM</label></p>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		</footer>
+        <!--footer section end-->
+
+
+</html>

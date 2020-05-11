@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<title>UB Social</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/bootstrap-select.css">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body>
+
+<!-- header -->
+<header>
+	<div class="w3ls-header"><!--header-one-->
+
+		<div class="w3ls-header-right">
+			<ul>
+				<li class="dropdown head-dpdn">
+					<a href="signin_front.html" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i> Sign In</a>
+				</li>
+				<li class="dropdown head-dpdn">
+					<a href="manage.html" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i>Manage</a>
+				</li>
+
+
+				<li class="dropdown head-dpdn">
+					<div class="header-right">
+<!-- Large modal -->
+
+	</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="clearfix"> </div>
+	</div>
+	<div class="container">
+		<div class="agile-its-header">
+			<div class="logo">
+				<h1><a href="index.html"><span>UB</span>Social</a></h1>
+			</div>
+			<div class="agileits_search">
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</header>
+
+
+<div class="total-ads main-grid-border">
+	<div class="container">
+
+		<div class="ads-grid">
+
+			<div class="agileinfo-ads-display col-md-9">
+				<div class="wrapper">
+				<div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
+
+					<div id="myTabContent" class="tab-content">
+					<div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
+						 <div>
+											<div id="container">
+
+							<div class="clearfix"></div>
+              <ul id = "alluser"class="list">
+                <h1>following</h1>
+							</ul>
+
+              <ul id = "allfollower"class="list">
+                <h1>follower</h1>
+							</ul>
+							<ul id = "section"class="list">
+						</ul>
+					</div>
+						</div>
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+
+	</div>
+	<!-- // Products -->
+		<script src= "/socket.io/socket.io.js"></script>
+		<script>
+
+      var server = ''
+      var io = io('');
+      function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+        }
+      var name = getCookie("name");
+      io.emit("all pmoment", name);
+			io.emit("all pcomment", name);
+      io.on("all puser", function(data){
+        console.log(data)
+         var conve_data = JSON.parse(data);
+         var all_user = document.getElementById('alluser');
+         for(var a = 0; a < conve_data.length; a++){
+            var msg = conve_data[a];
+            var single = document.createElement("single");
+            var self = document.cookie;
+            if(self != ""){
+            self_name = self.split("=")[1];
+          }
+            single.innerHTML += "<p>User: "+conve_data[a].self+"     "+"</p>";
+            all_user.append(single);
+         }
+       });
+
+       io.on("all pfollower", function(data){
+         console.log(data)
+          var conve_data = JSON.parse(data);
+          var all_user = document.getElementById('allfollower');
+          for(var a = 0; a < conve_data.length; a++){
+             var msg = conve_data[a];
+             var single = document.createElement("single");
+             var self = document.cookie;
+             if(self != ""){
+             self_name = self.split("=")[1];
+           }
+             single.innerHTML += "<p>User: "+conve_data[a].Follower+"     "+"</p>";
+             all_user.append(single);
+          }
+        });
+      io.on('not login in', function(data){
+          alert("please login in first");
+          window.location.href = "/signin_front.html";
+        });
+
+
+
+  	</script>
+
+</body>
+<script src="js/classie.js"></script>
+<script src="main.js"></script>
+</html>

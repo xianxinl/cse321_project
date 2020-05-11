@@ -1,0 +1,95 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>UB TRADE</title>
+<link rel="stylesheet" href="css/bootstrap.min.css"><!-- bootstrap-CSS -->
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" /><!-- style.css -->
+<link rel="stylesheet" href="css/font-awesome.min.css" /><!-- fontawesome-CSS -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- header -->
+	<header>
+		<div class="w3ls-header"><!--header-one-->
+			
+
+			<div class="clearfix"> </div>
+		</div>
+		<div class="container">
+			<div class="agile-its-header">
+				<div class="logo">
+					<h1><a href="index.html"><span>UB</span>Social</a></h1>
+				</div>
+				<div class="agileits_search">
+				<a class="post-w3layouts-ad" href="index.html">Back to Homepage</a>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</header>
+	<!-- //header -->
+	<!-- sign in form -->
+	 <section>
+		<div id="agileits-sign-in-page" class="sign-in-wrapper">
+			<div class="agileinfo_signin">
+			<h3>Sign In</h3>
+				<form enctype="multipart/form-data" name="login-form" onsubmit="return login()">
+					<input type="text" name="Your_Email" id="Email" placeholder="Your_Email" required="">
+					<input type="password" name="Password" id="Password" placeholder="Password" required="">
+					<input type="submit" value="Sign In">
+				</form>
+				<h6> Not a Member Yet? <a href="signup_front.html">Sign Up Now</a> </h6>
+			</div>
+		</div>
+	</section>
+		<footer>
+			<div class="agileits-footer-bottom text-center">
+			<div class="container">
+				<div class="w3-footer-logo">
+					<h1><a href="index.html"><span>UB</span>Social</a></h1>
+				</div>
+				<div class="copyrights">
+					<p> Design by  <label> CSE_312_TEAM</label></p>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		</footer>
+    		<script src= "/socket.io/socket.io.js"></script>
+        <script>
+        var server = ''
+        var io = io('');
+        function login(){
+          var email  = document.getElementById('Email').value;
+          var password  = document.getElementById('Password').value;
+          document.forms['login-form'].reset();
+          email = email.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+          password = password.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+          io.emit("login_form",{email,password});
+          return false;
+        }
+
+        io.on("login_forms",function(data){
+          var d = new Date();
+          d.setTime(d.getTime() + 2*60*1000);
+          var expires = "expires="+ d.toUTCString();
+          console.log(data);
+          document.cookie = data+";"+expires+";path='/'";
+          // document.cookie = data+";"+expires+";path='/manage.html'";
+          window.location.href = "/";
+        });
+
+        io.on('not login in', function(data){
+          alert("please login in first");
+          window.location.href = "/signin_front.html";
+        });
+
+        </script>
+
+
+
+</html>
