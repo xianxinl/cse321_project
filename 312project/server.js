@@ -85,7 +85,7 @@ io.on('connection', function (socket) {
 
       });
     };
-    db.query("INSERT INTO moment (msg,image) VALUES (?,?)",[data.moment,imgpath] function(error, result){
+    db.query("INSERT INTO moment (msg,image) VALUES (?,?)",[data.moment,imgpath], function(error, result){
       console.log(error);
       db.query("SELECT * FROM moment WHERE msg = (?) ORDER BY msgID DESC LIMIT 1",data.moment, function (error, message){
         io.emit('chat message',JSON.stringify(message));
